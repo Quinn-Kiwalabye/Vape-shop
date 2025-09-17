@@ -1,0 +1,5 @@
+Handle,Title,Body (HTML),Vendor,Type,Tags,Published
+vape-juice-1,Vape Juice 1,"<p>Delicious vape juice with fruity flavor.</p>",VapeCo,Juice,"fruit, vape, juice",TRUE
+vape-juice-2,Vape Juice 2,"<p>Refreshing mint vape juice.</p>",VapeCo,Juice,"mint, vape, juice",TRUE
+vape-device-1,Vape Device 1,"<p>Compact and powerful vape device.</p>",VapeCo,Device,"vape, device, compact",TRUE
+vape-device-2,Vape Device 2,"<p>Advanced vape device with adjustable settings.</p>",VapeCo,Device,"vape, device, advanced",TRUE
