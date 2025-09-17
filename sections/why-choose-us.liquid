@@ -1,0 +1,421 @@
+<section class="why-choose-us full-width">
+  <div class="why-choose-us__container">
+    <div class="why-choose-us__header">
+      <h2 class="why-choose-us__title">
+        {{ section.settings.heading | default: 'Why Choose Us' }}
+      </h2>
+      <p class="why-choose-us__subtitle">
+        {{ section.settings.subheading | default: 'Experience the difference with our premium vape products and exceptional service' }}
+      </p>
+    </div>
+
+    <div class="why-choose-us__grid">
+      {%- for block in section.blocks -%}
+        <div class="value-card">
+          <div class="value-card__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'quality' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {%- when 'flavors' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              {%- when 'shipping' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                </svg>
+              {%- when 'payment' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                </svg>
+              {%- when 'support' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                </svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+            {%- endcase -%}
+          </div>
+          
+          <div class="value-card__content">
+            <h3 class="value-card__title">{{ block.settings.title }}</h3>
+            <p class="value-card__description">{{ block.settings.description }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.why-choose-us {
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.why-choose-us::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(0, 234, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(226, 0, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.why-choose-us__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.why-choose-us__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.why-choose-us__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00eaff, #fff, #e200ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.why-choose-us__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.why-choose-us__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.value-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 234, 255, 0.15);
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: all 0.4s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.value-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.05), rgba(226, 0, 255, 0.05));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(0, 234, 255, 0.4);
+  box-shadow: 
+    0 20px 40px rgba(0, 234, 255, 0.15),
+    0 0 0 1px rgba(0, 234, 255, 0.1);
+}
+
+.value-card:hover::before {
+  opacity: 1;
+}
+
+.value-card:nth-child(even):hover {
+  border-color: rgba(226, 0, 255, 0.4);
+  box-shadow: 
+    0 20px 40px rgba(226, 0, 255, 0.15),
+    0 0 0 1px rgba(226, 0, 255, 0.1);
+}
+
+.value-card__icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.2), rgba(226, 0, 255, 0.2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.value-card__icon svg {
+  width: 24px;
+  height: 24px;
+  color: #00eaff;
+  transition: all 0.4s ease;
+}
+
+.value-card:hover .value-card__icon {
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.4), rgba(226, 0, 255, 0.4));
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.value-card:hover .value-card__icon svg {
+  color: #fff;
+  filter: drop-shadow(0 0 8px #00eaff);
+}
+
+.value-card:nth-child(even) .value-card__icon svg {
+  color: #e200ff;
+}
+
+.value-card:nth-child(even):hover .value-card__icon svg {
+  color: #fff;
+  filter: drop-shadow(0 0 8px #e200ff);
+}
+
+.value-card__content {
+  position: relative;
+  z-index: 2;
+}
+
+.value-card__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+  transition: color 0.4s ease;
+}
+
+.value-card:hover .value-card__title {
+  color: #00eaff;
+}
+
+.value-card:nth-child(even):hover .value-card__title {
+  color: #e200ff;
+}
+
+.value-card__description {
+  font-size: 0.95rem;
+  color: #b4eaff;
+  line-height: 1.6;
+  margin: 0;
+  transition: color 0.4s ease;
+}
+
+.value-card:hover .value-card__description {
+  color: #e6f7ff;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .why-choose-us__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .why-choose-us {
+    padding: 4rem 0;
+  }
+  
+  .why-choose-us__container {
+    padding: 0 1rem;
+  }
+  
+  .why-choose-us__title {
+    font-size: 2rem;
+  }
+  
+  .why-choose-us__subtitle {
+    font-size: 1rem;
+  }
+  
+  .why-choose-us__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .value-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .value-card__icon {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .value-card__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .why-choose-us__title {
+    font-size: 1.75rem;
+  }
+  
+  .value-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .value-card__icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1rem;
+  }
+  
+  .value-card__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .value-card__title {
+    font-size: 1.2rem;
+  }
+  
+  .value-card__description {
+    font-size: 0.9rem;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Why Choose Us",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "default": "Experience the difference with our premium vape products and exceptional service",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value_prop",
+      "name": "Value Proposition",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "quality",
+              "label": "Premium Quality (Star)"
+            },
+            {
+              "value": "flavors",
+              "label": "Wide Range of Flavors (Check)"
+            },
+            {
+              "value": "shipping",
+              "label": "Fast Shipping (Truck)"
+            },
+            {
+              "value": "payment",
+              "label": "Secure Payments (Card)"
+            },
+            {
+              "value": "support",
+              "label": "Customer Support (Chat)"
+            }
+          ],
+          "default": "quality"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Premium Quality"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "We source only the finest materials and ingredients to ensure every product meets our high standards."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Choose Us",
+      "blocks": [
+        {
+          "type": "value_prop",
+          "settings": {
+            "icon": "quality",
+            "title": "Premium Quality",
+            "description": "We source only the finest materials and ingredients to ensure every product meets our high standards."
+          }
+        },
+        {
+          "type": "value_prop",
+          "settings": {
+            "icon": "flavors",
+            "title": "Wide Range of Flavors",
+            "description": "From classic tobacco to exotic fruit blends, discover hundreds of premium flavors."
+          }
+        },
+        {
+          "type": "value_prop",
+          "settings": {
+            "icon": "shipping",
+            "title": "Fast Shipping",
+            "description": "Get your orders delivered quickly with our expedited shipping options."
+          }
+        },
+        {
+          "type": "value_prop",
+          "settings": {
+            "icon": "payment",
+            "title": "Secure Payments",
+            "description": "Shop with confidence using our encrypted payment system."
+          }
+        },
+        {
+          "type": "value_prop",
+          "settings": {
+            "icon": "support",
+            "title": "Expert Support",
+            "description": "Our knowledgeable team is here to help you find the perfect products."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

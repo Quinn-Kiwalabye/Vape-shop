@@ -1,0 +1,524 @@
+<section class="category-showcase full-width">
+  <div class="category-showcase__container">
+    <div class="category-showcase__header">
+      <h2 class="category-showcase__title">
+        {{ section.settings.heading | default: 'Shop by Category' }}
+      </h2>
+      <p class="category-showcase__subtitle">
+        {{ section.settings.subheading | default: 'Discover our premium collection of vape products' }}
+      </p>
+    </div>
+
+    <div class="category-showcase__grid">
+      {%- for block in section.blocks -%}
+        <div class="category-card category-card--{{ block.settings.layout }}" {{ block.shopify_attributes }}>
+          <div class="category-card__image">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 600 | image_tag: 
+                  loading: 'lazy',
+                  alt: block.settings.title | escape
+              }}
+            {%- else -%}
+              <div class="category-card__placeholder">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>{{ block.settings.title }}</span>
+              </div>
+            {%- endif -%}
+            
+            <div class="category-card__overlay">
+              <div class="category-card__content">
+                <h3 class="category-card__title">{{ block.settings.title }}</h3>
+                <p class="category-card__description">{{ block.settings.description }}</p>
+                
+                {%- if block.settings.features != blank -%}
+                  <ul class="category-card__features">
+                    {%- assign features = block.settings.features | split: ',' -%}
+                    {%- for feature in features limit: 3 -%}
+                      <li>{{ feature | strip }}</li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                
+                <a href="{{ block.settings.link_url | default: '#' }}" class="category-card__button">
+                  <span>{{ block.settings.button_text | default: 'Shop Now' }}</span>
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          {%- if block.settings.badge_text != blank -%}
+            <div class="category-card__badge">{{ block.settings.badge_text }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.category-showcase {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-showcase::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 15% 30%, rgba(0, 234, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 70%, rgba(226, 0, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.category-showcase__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.category-showcase__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.category-showcase__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00eaff, #fff, #e200ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.category-showcase__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.category-showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 400px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+}
+
+.category-card--featured {
+  grid-column: span 2;
+  height: 500px;
+}
+
+.category-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 234, 255, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 234, 255, 0.2);
+}
+
+.category-card:nth-child(even):hover {
+  border-color: rgba(226, 0, 255, 0.5);
+  box-shadow: 0 20px 40px rgba(226, 0, 255, 0.2);
+}
+
+.category-card__image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.category-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-card__image img {
+  transform: scale(1.1);
+}
+
+.category-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.1), rgba(226, 0, 255, 0.1));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #00eaff;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.category-card__placeholder svg {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.category-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem;
+  transition: background 0.4s ease;
+}
+
+.category-card:hover .category-card__overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 234, 255, 0.1) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+.category-card:nth-child(even):hover .category-card__overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(226, 0, 255, 0.1) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+.category-card__content {
+  width: 100%;
+}
+
+.category-card__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.category-card--featured .category-card__title {
+  font-size: 2.5rem;
+}
+
+.category-card__description {
+  color: #b4eaff;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.category-card__features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-card__features li {
+  background: rgba(0, 234, 255, 0.2);
+  color: #00eaff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(0, 234, 255, 0.3);
+}
+
+.category-card:nth-child(even) .category-card__features li {
+  background: rgba(226, 0, 255, 0.2);
+  color: #e200ff;
+  border-color: rgba(226, 0, 255, 0.3);
+}
+
+.category-card__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 234, 255, 0.3);
+}
+
+.category-card:nth-child(even) .category-card__button {
+  background: linear-gradient(135deg, #e200ff, #cc0099);
+  box-shadow: 0 4px 15px rgba(226, 0, 255, 0.3);
+}
+
+.category-card__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 234, 255, 0.5);
+}
+
+.category-card:nth-child(even) .category-card__button:hover {
+  box-shadow: 0 8px 25px rgba(226, 0, 255, 0.5);
+}
+
+.category-card__button svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.category-card__button:hover svg {
+  transform: translateX(4px);
+}
+
+.category-card__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #ff006e, #e200ff);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  z-index: 3;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .category-card--featured {
+    grid-column: span 1;
+    height: 400px;
+  }
+  
+  .category-card--featured .category-card__title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-showcase {
+    padding: 4rem 0;
+  }
+  
+  .category-showcase__container {
+    padding: 0 1rem;
+  }
+  
+  .category-showcase__title {
+    font-size: 2rem;
+  }
+  
+  .category-showcase__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .category-card {
+    height: 350px;
+  }
+  
+  .category-card__overlay {
+    padding: 1.5rem;
+  }
+  
+  .category-card__title {
+    font-size: 1.75rem;
+  }
+  
+  .category-card__features {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-card {
+    height: 300px;
+  }
+  
+  .category-card__overlay {
+    padding: 1rem;
+  }
+  
+  .category-card__title {
+    font-size: 1.5rem;
+  }
+  
+  .category-card__description {
+    font-size: 0.9rem;
+  }
+  
+  .category-card__button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Category Showcase",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Shop by Category",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Discover our premium collection of vape products",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "featured",
+              "label": "Featured (2x width)"
+            }
+          ],
+          "default": "default"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title",
+          "default": "Devices"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Premium mods, pods, and disposables for every vaping style"
+        },
+        {
+          "type": "text",
+          "id": "features",
+          "label": "Features (comma separated)",
+          "info": "e.g., Mods, Pods, Disposables",
+          "default": "Mods, Pods, Disposables"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text (optional)",
+          "placeholder": "New Arrivals"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Category Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Showcase",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "layout": "featured",
+            "title": "Devices",
+            "description": "Premium mods, pods, and disposables for every vaping style",
+            "features": "Mods, Pods, Disposables",
+            "badge_text": "Best Sellers",
+            "button_text": "Shop Devices"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "E-Liquids",
+            "description": "Hundreds of premium flavors in various nicotine strengths",
+            "features": "100+ Flavors, 0-50mg Nicotine, Premium Quality",
+            "button_text": "Shop E-Liquids"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Accessories",
+            "description": "Everything you need to enhance your vaping experience",
+            "features": "Coils, Batteries, Chargers",
+            "button_text": "Shop Accessories"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

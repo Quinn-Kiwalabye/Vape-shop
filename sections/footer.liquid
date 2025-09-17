@@ -1,0 +1,105 @@
+<footer class="footer full-width">
+  <div class="footer__copyright">
+    &copy;
+    {{ 'now' | date: '%Y' }}
+    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+  </div>
+
+  <div class="footer__links">
+    {% for link in section.settings.menu.links %}
+      {{ link.title | link_to: link.url }}
+    {% endfor %}
+  </div>
+
+  <div class="footer__payment">
+    {% if section.settings.show_payment_icons %}
+      {% for type in shop.enabled_payment_types %}
+        {{ type | payment_type_svg_tag }}
+      {% endfor %}
+    {% endif %}
+  </div>
+</footer>
+
+{% stylesheet %}
+  footer {
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  background: rgba(15, 15, 30, 0.96); /* dark glassy */
+  border-radius: 0 0 16px 16px;
+  border-top: 2px solid #00eaff;
+
+  box-shadow: 0 0 20px 2px #00eaff30;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  }
+  .footer__copyright {
+  color: #b4eaff;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px #00eaff50;
+}
+
+.footer__copyright a {
+  color: #00eaff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+  text-shadow: 0 0 8px #00eaff80;
+}
+
+.footer__copyright a:hover {
+  color: #e200ff;
+  text-shadow: 0 0 12px #e200ff90;
+}
+
+.footer__links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer__links a {
+  color: #b4eaff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.07rem;
+  text-shadow: 0 0 6px #00eaff30;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.footer__links a:hover {
+  color: #00eaff;
+  text-shadow: 0 0 12px #00eaff90;
+}
+
+.footer__payment {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer__payment svg {
+  height: 1.6rem;
+  filter: drop-shadow(0 0 6px #00eaff60);
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.footer",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:labels.show_payment_icons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,634 @@
+<section class="newsletter-signup full-width">
+  <div class="newsletter-signup__container">
+    <div class="newsletter-signup__content">
+      <div class="newsletter-signup__text">
+        <h2 class="newsletter-signup__title">
+          {{ section.settings.heading | default: 'Join the VIP Club' }}
+        </h2>
+        <p class="newsletter-signup__subtitle">
+          {{ section.settings.subheading | default: 'Get exclusive deals, new product alerts, and vaping tips delivered to your inbox' }}
+        </p>
+        
+        <div class="newsletter-signup__benefits">
+          {%- if section.settings.show_discount_offer -%}
+            <div class="benefit-item benefit-item--highlight">
+              <svg class="benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span>{{ section.settings.discount_text | default: 'Get 10% off your first order' }}</span>
+            </div>
+          {%- endif -%}
+          
+          {%- if section.settings.benefit_1 != blank -%}
+            <div class="benefit-item">
+              <svg class="benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>{{ section.settings.benefit_1 }}</span>
+            </div>
+          {%- endif -%}
+          
+          {%- if section.settings.benefit_2 != blank -%}
+            <div class="benefit-item">
+              <svg class="benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>{{ section.settings.benefit_2 }}</span>
+            </div>
+          {%- endif -%}
+          
+          {%- if section.settings.benefit_3 != blank -%}
+            <div class="benefit-item">
+              <svg class="benefit-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>{{ section.settings.benefit_3 }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="newsletter-signup__form-wrapper">
+        {%- if section.settings.show_discount_badge -%}
+          <div class="discount-badge">
+            <span class="discount-badge__text">{{ section.settings.discount_badge_text | default: '10% OFF' }}</span>
+            <span class="discount-badge__subtext">First Order</span>
+          </div>
+        {%- endif -%}
+
+        <form action="{{ routes.root_url }}contact#newsletter-form" method="post" class="newsletter-form" id="newsletter-form">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          
+          <div class="form-group">
+            <div class="input-wrapper">
+              <input 
+                type="email" 
+                name="contact[email]" 
+                id="newsletter-email"
+                class="newsletter-input"
+                placeholder="{{ section.settings.input_placeholder | default: 'Enter your email address' }}"
+                required
+                autocomplete="email"
+              >
+              <button type="submit" class="newsletter-button">
+                <span class="button-text">{{ section.settings.button_text | default: 'Get 10% Off' }}</span>
+                <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          {%- if section.settings.show_privacy_text -%}
+            <p class="privacy-text">
+              {{ section.settings.privacy_text | default: 'By subscribing, you agree to our privacy policy. Unsubscribe anytime.' }}
+            </p>
+          {%- endif -%}
+        </form>
+
+        <div class="success-message" id="newsletter-success">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <h3>Welcome to the VIP Club!</h3>
+          <p>Check your email for your 10% discount code</p>
+        </div>
+      </div>
+    </div>
+
+    {%- if section.settings.show_loyalty_info -%}
+      <div class="loyalty-program">
+        <h3 class="loyalty-program__title">{{ section.settings.loyalty_title | default: 'VIP Loyalty Rewards' }}</h3>
+        <div class="loyalty-tiers">
+          <div class="loyalty-tier">
+            <div class="tier-icon">🥉</div>
+            <h4>Bronze</h4>
+            <p>5% back on every purchase</p>
+          </div>
+          <div class="loyalty-tier">
+            <div class="tier-icon">🥈</div>
+            <h4>Silver</h4>
+            <p>10% back + early access</p>
+          </div>
+          <div class="loyalty-tier">
+            <div class="tier-icon">🥇</div>
+            <h4>Gold</h4>
+            <p>15% back + exclusive products</p>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('newsletter-form');
+  const successMessage = document.getElementById('newsletter-success');
+  
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('newsletter-email').value;
+      const formData = new FormData(form);
+      
+      // Show loading state
+      const button = form.querySelector('.newsletter-button');
+      const originalText = button.querySelector('.button-text').textContent;
+      button.querySelector('.button-text').textContent = 'Subscribing...';
+      button.disabled = true;
+      
+      // Simulate form submission (replace with actual Shopify form handling)
+      fetch(form.action, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          // Show success message
+          form.style.display = 'none';
+          successMessage.style.display = 'block';
+          
+          // Track conversion (optional)
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'newsletter_signup', {
+              'event_category': 'engagement',
+              'event_label': 'newsletter'
+            });
+          }
+        } else {
+          throw new Error('Subscription failed');
+        }
+      })
+      .catch(error => {
+        // Reset button state
+        button.querySelector('.button-text').textContent = originalText;
+        button.disabled = false;
+        
+        // Show error (you can customize this)
+        alert('Something went wrong. Please try again.');
+      });
+    });
+  }
+  
+  // Email validation
+  const emailInput = document.getElementById('newsletter-email');
+  if (emailInput) {
+    emailInput.addEventListener('input', function() {
+      const isValid = this.checkValidity();
+      this.classList.toggle('invalid', !isValid && this.value.length > 0);
+    });
+  }
+});
+</script>
+
+{% stylesheet %}
+.newsletter-signup {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletter-signup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(0, 234, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(226, 0, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.newsletter-signup__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter-signup__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.newsletter-signup__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00eaff, #fff, #e200ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.newsletter-signup__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.newsletter-signup__benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #e6f7ff;
+  font-size: 1rem;
+}
+
+.benefit-item--highlight {
+  background: rgba(0, 234, 255, 0.1);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #00eaff;
+  font-weight: 600;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px rgba(0, 234, 255, 0.3); }
+  to { box-shadow: 0 0 20px rgba(0, 234, 255, 0.6); }
+}
+
+.benefit-icon {
+  width: 20px;
+  height: 20px;
+  color: #00eaff;
+  flex-shrink: 0;
+}
+
+.newsletter-signup__form-wrapper {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  backdrop-filter: blur(15px);
+}
+
+.discount-badge {
+  position: absolute;
+  top: -1rem;
+  right: 2rem;
+  background: linear-gradient(135deg, #ff006e, #e200ff);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+.discount-badge__text {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.discount-badge__subtext {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.newsletter-form {
+  margin-top: 1rem;
+}
+
+.input-wrapper {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(0, 234, 255, 0.3);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: rgba(0, 234, 255, 0.6);
+  box-shadow: 0 0 20px rgba(0, 234, 255, 0.3);
+}
+
+.newsletter-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 1rem 1.5rem;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.newsletter-input::placeholder {
+  color: rgba(180, 234, 255, 0.7);
+}
+
+.newsletter-input.invalid {
+  color: #ff4444;
+}
+
+.newsletter-button {
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  border: none;
+  padding: 1rem 2rem;
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.newsletter-button:hover {
+  background: linear-gradient(135deg, #00eaff, #0080ff);
+  transform: translateX(-2px);
+  box-shadow: 0 5px 15px rgba(0, 234, 255, 0.4);
+}
+
+.newsletter-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button-icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.newsletter-button:hover .button-icon {
+  transform: translateX(2px);
+}
+
+.privacy-text {
+  font-size: 0.85rem;
+  color: rgba(180, 234, 255, 0.8);
+  text-align: center;
+  margin-top: 1rem;
+  line-height: 1.4;
+}
+
+.success-message {
+  display: none;
+  text-align: center;
+  color: #00ff88;
+  padding: 2rem;
+}
+
+.success-message svg {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  color: #00ff88;
+}
+
+.success-message h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.loyalty-program {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(226, 0, 255, 0.2);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.loyalty-program__title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #e200ff;
+  margin-bottom: 2rem;
+}
+
+.loyalty-tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.loyalty-tier {
+  background: rgba(226, 0, 255, 0.1);
+  border: 1px solid rgba(226, 0, 255, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.loyalty-tier:hover {
+  transform: translateY(-5px);
+  border-color: rgba(226, 0, 255, 0.5);
+  box-shadow: 0 10px 25px rgba(226, 0, 255, 0.2);
+}
+
+.tier-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.loyalty-tier h4 {
+  color: #e200ff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.loyalty-tier p {
+  color: #b4eaff;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .newsletter-signup {
+    padding: 4rem 0;
+  }
+  
+  .newsletter-signup__container {
+    padding: 0 1rem;
+  }
+  
+  .newsletter-signup__content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .newsletter-signup__title {
+    font-size: 2rem;
+  }
+  
+  .newsletter-signup__form-wrapper {
+    padding: 2rem 1.5rem;
+  }
+  
+  .discount-badge {
+    position: static;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  
+  .input-wrapper {
+    flex-direction: column;
+  }
+  
+  .newsletter-button {
+    border-radius: 0 0 1rem 1rem;
+    justify-content: center;
+  }
+  
+  .loyalty-tiers {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .newsletter-signup__form-wrapper {
+    padding: 1.5rem 1rem;
+  }
+  
+  .newsletter-input {
+    padding: 0.75rem 1rem;
+  }
+  
+  .newsletter-button {
+    padding: 0.75rem 1.5rem;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter Signup",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Join the VIP Club",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "default": "Get exclusive deals, new product alerts, and vaping tips delivered to your inbox",
+      "label": "Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_offer",
+      "default": true,
+      "label": "Show Discount Offer"
+    },
+    {
+      "type": "text",
+      "id": "discount_text",
+      "default": "Get 10% off your first order",
+      "label": "Discount Offer Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_badge",
+      "default": true,
+      "label": "Show Discount Badge"
+    },
+    {
+      "type": "text",
+      "id": "discount_badge_text",
+      "default": "10% OFF",
+      "label": "Discount Badge Text"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1",
+      "default": "Exclusive member-only deals",
+      "label": "Benefit 1"
+    },
+    {
+      "type": "text",
+      "id": "benefit_2",
+      "default": "Early access to new products",
+      "label": "Benefit 2"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3",
+      "default": "Expert vaping tips & guides",
+      "label": "Benefit 3"
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "default": "Enter your email address",
+      "label": "Input Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Get 10% Off",
+      "label": "Button Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_privacy_text",
+      "default": true,
+      "label": "Show Privacy Text"
+    },
+    {
+      "type": "text",
+      "id": "privacy_text",
+      "default": "By subscribing, you agree to our privacy policy. Unsubscribe anytime.",
+      "label": "Privacy Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_loyalty_info",
+      "default": true,
+      "label": "Show Loyalty Program Info"
+    },
+    {
+      "type": "text",
+      "id": "loyalty_title",
+      "default": "VIP Loyalty Rewards",
+      "label": "Loyalty Program Title"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Signup"
+    }
+  ]
+}
+{% endschema %}

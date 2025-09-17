@@ -1,0 +1,629 @@
+<section class="promotions full-width">
+  <div class="promotions__container">
+    <div class="promotions__header">
+      <h2 class="promotions__title">
+        {{ section.settings.heading | default: 'Special Offers' }}
+      </h2>
+      <p class="promotions__subtitle">
+        {{ section.settings.subheading | default: 'Limited time deals you do not want to miss' }}
+      </p>
+    </div>
+
+    <div class="promotions__grid">
+      {%- for block in section.blocks -%}
+        <div class="promo-card promo-card--{{ block.settings.style }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.show_countdown and block.settings.end_date != blank -%}
+            <div class="promo-card__countdown" 
+                 data-end-date="{{ block.settings.end_date | date: '%Y-%m-%d %H:%M:%S' }}">
+              <div class="countdown-timer">
+                <div class="countdown-item">
+                  <span class="countdown-number" data-days>00</span>
+                  <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                  <span class="countdown-number" data-hours>00</span>
+                  <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                  <span class="countdown-number" data-minutes>00</span>
+                  <span class="countdown-label">Min</span>
+                </div>
+                <div class="countdown-item">
+                  <span class="countdown-number" data-seconds>00</span>
+                  <span class="countdown-label">Sec</span>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="promo-card__content">
+            {%- if block.settings.badge_text != blank -%}
+              <div class="promo-card__badge">{{ block.settings.badge_text }}</div>
+            {%- endif -%}
+
+            <h3 class="promo-card__title">{{ block.settings.title }}</h3>
+            
+            {%- if block.settings.discount_code != blank -%}
+              <div class="promo-card__discount">
+                <span class="discount-label">Use Code:</span>
+                <span class="discount-code" data-code="{{ block.settings.discount_code }}">
+                  {{ block.settings.discount_code }}
+                </span>
+                <button class="copy-code-btn" data-clipboard-target=".discount-code">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                  </svg>
+                </button>
+              </div>
+            {%- endif -%}
+
+            <p class="promo-card__description">{{ block.settings.description }}</p>
+
+            {%- if block.settings.button_text != blank -%}
+              <a href="{{ block.settings.button_url | default: '#' }}" class="promo-card__button btn btn--glow">
+                {{ block.settings.button_text }}
+                <span class="btn__arrow">→</span>
+              </a>
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.background_image != blank -%}
+            <div class="promo-card__bg">
+              {{ block.settings.background_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Countdown Timer Function
+  function updateCountdown(element, endDate) {
+    const now = new Date().getTime();
+    const distance = endDate - now;
+
+    if (distance < 0) {
+      element.querySelector('.countdown-timer').innerHTML = '<div class="countdown-expired">EXPIRED</div>';
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    element.querySelector('[data-days]').textContent = days.toString().padStart(2, '0');
+    element.querySelector('[data-hours]').textContent = hours.toString().padStart(2, '0');
+    element.querySelector('[data-minutes]').textContent = minutes.toString().padStart(2, '0');
+    element.querySelector('[data-seconds]').textContent = seconds.toString().padStart(2, '0');
+  }
+
+  // Initialize all countdowns
+  document.querySelectorAll('[data-end-date]').forEach(function(countdown) {
+    const endDateStr = countdown.getAttribute('data-end-date');
+    const endDate = new Date(endDateStr).getTime();
+    
+    updateCountdown(countdown, endDate);
+    
+    setInterval(function() {
+      updateCountdown(countdown, endDate);
+    }, 1000);
+  });
+
+  // Copy discount code functionality
+  document.querySelectorAll('.copy-code-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+      const code = this.parentElement.querySelector('.discount-code').textContent;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function() {
+          showCopyFeedback(button);
+        });
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showCopyFeedback(button);
+      }
+    });
+  });
+
+  function showCopyFeedback(button) {
+    const originalHTML = button.innerHTML;
+    button.innerHTML = '<span style="font-size: 12px;">Copied!</span>';
+    button.style.background = '#00ff00';
+    
+    setTimeout(function() {
+      button.innerHTML = originalHTML;
+      button.style.background = '';
+    }, 2000);
+  }
+});
+</script>
+
+{% stylesheet %}
+.promotions {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.promotions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(0, 234, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(226, 0, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.promotions__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.promotions__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.promotions__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ff006e, #e200ff, #00eaff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(226, 0, 255, 0.5);
+}
+
+.promotions__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.promotions__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.promo-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  transition: all 0.4s ease;
+}
+
+.promo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 234, 255, 0.1), rgba(226, 0, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.promo-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 234, 255, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 234, 255, 0.2);
+}
+
+.promo-card:hover::before {
+  opacity: 1;
+}
+
+.promo-card--featured {
+  border-color: rgba(226, 0, 255, 0.5);
+  background: rgba(226, 0, 255, 0.08);
+}
+
+.promo-card--featured:hover {
+  border-color: rgba(226, 0, 255, 0.8);
+  box-shadow: 0 20px 40px rgba(226, 0, 255, 0.3);
+}
+
+.promo-card__countdown {
+  margin-bottom: 1.5rem;
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.countdown-item {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  min-width: 60px;
+  border: 1px solid rgba(0, 234, 255, 0.3);
+}
+
+.countdown-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #00eaff;
+  text-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+}
+
+.countdown-label {
+  display: block;
+  font-size: 0.7rem;
+  color: #b4eaff;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.countdown-expired {
+  text-align: center;
+  color: #ff4444;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.promo-card__content {
+  position: relative;
+  z-index: 2;
+}
+
+.promo-card__badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #e200ff, #ff006e);
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.promo-card__title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.promo-card__discount {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 234, 255, 0.4);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.discount-label {
+  font-size: 0.9rem;
+  color: #b4eaff;
+  font-weight: 600;
+}
+
+.discount-code {
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.copy-code-btn {
+  background: rgba(0, 234, 255, 0.2);
+  border: 1px solid rgba(0, 234, 255, 0.4);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: #00eaff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-code-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.copy-code-btn:hover {
+  background: rgba(0, 234, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.promo-card__description {
+  color: #b4eaff;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.promo-card__button {
+  background: linear-gradient(135deg, #00eaff, #0066cc);
+  color: #000;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.promo-card__button:hover {
+  background: linear-gradient(135deg, #00eaff, #0080ff);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 234, 255, 0.4);
+}
+
+.btn__arrow {
+  transition: transform 0.3s ease;
+}
+
+.promo-card__button:hover .btn__arrow {
+  transform: translateX(4px);
+}
+
+.promo-card__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.promo-card__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .promotions {
+    padding: 4rem 0;
+  }
+  
+  .promotions__container {
+    padding: 0 1rem;
+  }
+  
+  .promotions__title {
+    font-size: 2rem;
+  }
+  
+  .promotions__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .promo-card {
+    padding: 1.5rem;
+  }
+  
+  .countdown-timer {
+    gap: 0.5rem;
+  }
+  
+  .countdown-item {
+    min-width: 50px;
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .countdown-number {
+    font-size: 1.2rem;
+  }
+  
+  .promo-card__discount {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .promo-card__title {
+    font-size: 1.5rem;
+  }
+  
+  .countdown-timer {
+    gap: 0.25rem;
+  }
+  
+  .countdown-item {
+    min-width: 45px;
+  }
+  
+  .countdown-number {
+    font-size: 1rem;
+  }
+  
+  .discount-code {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Promotions",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Special Offers",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Limited time deals you do not want to miss",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotion",
+      "name": "Promotion",
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "featured",
+              "label": "Featured"
+            }
+          ],
+          "default": "default"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "Limited Time"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "30% Off All E-Liquids"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Stock up on your favorite flavors with our biggest discount of the year!"
+        },
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Discount Code",
+          "default": "SAVE30"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_countdown",
+          "label": "Show Countdown Timer",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "end_date",
+          "label": "End Date (YYYY-MM-DD HH:MM:SS)",
+          "info": "Format: 2024-12-31 23:59:59"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background Image (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotions & Special Offers",
+      "blocks": [
+        {
+          "type": "promotion",
+          "settings": {
+            "style": "featured",
+            "badge_text": "Flash Sale",
+            "title": "30% Off All E-Liquids",
+            "description": "Stock up on your favorite flavors with our biggest discount of the year!",
+            "discount_code": "FLASH30",
+            "button_text": "Shop E-Liquids",
+            "show_countdown": true,
+            "end_date": "2024-12-31 23:59:59"
+          }
+        },
+        {
+          "type": "promotion",
+          "settings": {
+            "badge_text": "Bundle Deal",
+            "title": "Starter Kit + 3 Pods",
+            "description": "Perfect combo for beginners. Everything you need to get started!",
+            "discount_code": "STARTER25",
+            "button_text": "Get Bundle",
+            "show_countdown": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

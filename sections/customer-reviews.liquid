@@ -1,0 +1,752 @@
+<section class="customer-reviews full-width">
+  <div class="customer-reviews__container">
+    <div class="customer-reviews__header">
+      <h2 class="customer-reviews__title">
+        {{ section.settings.heading | default: 'What Our Customers Say' }}
+      </h2>
+      <p class="customer-reviews__subtitle">
+        {{ section.settings.subheading | default: 'Join thousands of satisfied customers who trust us for their vaping needs' }}
+      </p>
+      
+      {%- if section.settings.show_overall_rating -%}
+        <div class="overall-rating">
+          <div class="overall-rating__stars">
+            {%- for i in (1..5) -%}
+              <svg class="star star--filled" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            {%- endfor -%}
+          </div>
+          <span class="overall-rating__text">
+            {{ section.settings.overall_rating | default: '4.9' }}/5 from {{ section.settings.total_reviews | default: '1,247' }} reviews
+          </span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="customer-reviews__grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'review' -%}
+            <div class="review-card" {{ block.shopify_attributes }}>
+              <div class="review-card__header">
+                <div class="review-card__avatar">
+                  {%- if block.settings.customer_image != blank -%}
+                    {{ block.settings.customer_image | image_url: width: 80 | image_tag: 
+                        loading: 'lazy',
+                        alt: block.settings.customer_name | escape
+                    }}
+                  {%- else -%}
+                    <div class="avatar-placeholder">
+                      {{ block.settings.customer_name | slice: 0 | upcase }}
+                    </div>
+                  {%- endif -%}
+                </div>
+                
+                <div class="review-card__info">
+                  <h4 class="review-card__name">{{ block.settings.customer_name }}</h4>
+                  <div class="review-card__meta">
+                    {%- if block.settings.customer_location != blank -%}
+                      <span class="review-card__location">{{ block.settings.customer_location }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.verified_purchase -%}
+                      <span class="review-card__verified">✓ Verified Purchase</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+
+              <div class="review-card__rating">
+                {%- assign rating = block.settings.rating | default: 5 -%}
+                {%- for i in (1..5) -%}
+                  {%- if i <= rating -%}
+                    <svg class="star star--filled" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  {%- else -%}
+                    <svg class="star star--empty" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  {%- endif -%}
+                {%- endfor -%}
+                <span class="review-card__date">{{ block.settings.review_date | default: 'Recent' }}</span>
+              </div>
+
+              <blockquote class="review-card__quote">
+                "{{ block.settings.review_text }}"
+              </blockquote>
+
+              {%- if block.settings.product_mentioned != blank -%}
+                <div class="review-card__product">
+                  <span class="product-tag">{{ block.settings.product_mentioned }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+
+          {%- when 'platform_widget' -%}
+            <div class="platform-widget platform-widget--{{ block.settings.platform }}" {{ block.shopify_attributes }}>
+              <div class="platform-widget__header">
+                <div class="platform-widget__logo">
+                  {%- case block.settings.platform -%}
+                    {%- when 'trustpilot' -%}
+                      <svg viewBox="0 0 126 31" fill="currentColor">
+                        <path d="M24.3 10.9h7.4v2.4h-4.7v2.6h4.4v2.3h-4.4v4.2h-2.7V10.9zm9.1 8.5c0-2.2 1.6-3.7 3.9-3.7s3.9 1.5 3.9 3.7-1.6 3.7-3.9 3.7-3.9-1.5-3.9-3.7zm5.1 0c0-.8-.5-1.4-1.2-1.4s-1.2.6-1.2 1.4.5 1.4 1.2 1.4 1.2-.6 1.2-1.4z"/>
+                      </svg>
+                      <span>Trustpilot</span>
+                    {%- when 'google' -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      </svg>
+                      <span>Google</span>
+                    {%- else -%}
+                      <span>Reviews</span>
+                  {%- endcase -%}
+                </div>
+                
+                <div class="platform-widget__rating">
+                  <div class="platform-widget__stars">
+                    {%- for i in (1..5) -%}
+                      <svg class="star star--filled" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    {%- endfor -%}
+                  </div>
+                  <span class="platform-widget__score">{{ block.settings.platform_rating | default: '4.8' }}</span>
+                </div>
+              </div>
+
+              <p class="platform-widget__text">{{ block.settings.platform_text }}</p>
+              
+              {%- if block.settings.platform_link != blank -%}
+                <a href="{{ block.settings.platform_link }}" class="platform-widget__button" target="_blank" rel="noopener">
+                  View All Reviews
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                  </svg>
+                </a>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_review_cta -%}
+      <div class="review-cta">
+        <h3 class="review-cta__title">{{ section.settings.cta_title | default: 'Love our products?' }}</h3>
+        <p class="review-cta__text">{{ section.settings.cta_text | default: 'Share your experience and help others discover quality vaping products' }}</p>
+        <a href="{{ section.settings.cta_link | default: '#' }}" class="review-cta__button">
+          {{ section.settings.cta_button_text | default: 'Write a Review' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.customer-reviews {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.customer-reviews::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 234, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(226, 0, 255, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.customer-reviews__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.customer-reviews__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.customer-reviews__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00eaff, #fff, #e200ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.customer-reviews__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+.overall-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.overall-rating__stars {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.overall-rating__text {
+  color: #00eaff;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.customer-reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.review-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 234, 255, 0.4);
+  box-shadow: 0 15px 30px rgba(0, 234, 255, 0.15);
+}
+
+.review-card:nth-child(even):hover {
+  border-color: rgba(226, 0, 255, 0.4);
+  box-shadow: 0 15px 30px rgba(226, 0, 255, 0.15);
+}
+
+.review-card__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.review-card__avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.review-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.review-card__info {
+  flex: 1;
+}
+
+.review-card__name {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.review-card__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #b4eaff;
+}
+
+.review-card__verified {
+  color: #00ff88;
+  font-weight: 600;
+}
+
+.review-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.review-card__date {
+  color: #b4eaff;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+.star {
+  width: 16px;
+  height: 16px;
+}
+
+.star--filled {
+  color: #ffd700;
+}
+
+.star--empty {
+  color: rgba(255, 215, 0, 0.3);
+  stroke-width: 1;
+}
+
+.review-card__quote {
+  color: #e6f7ff;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  font-style: italic;
+  position: relative;
+}
+
+.review-card__quote::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem;
+  left: -0.5rem;
+  font-size: 3rem;
+  color: rgba(0, 234, 255, 0.3);
+  line-height: 1;
+}
+
+.review-card__product {
+  margin-top: 1rem;
+}
+
+.product-tag {
+  background: rgba(0, 234, 255, 0.2);
+  color: #00eaff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(0, 234, 255, 0.3);
+}
+
+.platform-widget {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(226, 0, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  text-align: center;
+}
+
+.platform-widget:hover {
+  transform: translateY(-5px);
+  border-color: rgba(226, 0, 255, 0.5);
+  box-shadow: 0 15px 30px rgba(226, 0, 255, 0.2);
+}
+
+.platform-widget__header {
+  margin-bottom: 1.5rem;
+}
+
+.platform-widget__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #e200ff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.platform-widget__logo svg {
+  width: 24px;
+  height: 24px;
+}
+
+.platform-widget__rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.platform-widget__stars {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.platform-widget__score {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.platform-widget__text {
+  color: #b4eaff;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.platform-widget__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #e200ff, #cc0099);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.platform-widget__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(226, 0, 255, 0.4);
+}
+
+.platform-widget__button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.review-cta {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 3rem 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.review-cta__title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.review-cta__text {
+  color: #b4eaff;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-cta__button {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  color: #000;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.review-cta__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 234, 255, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .customer-reviews {
+    padding: 4rem 0;
+  }
+  
+  .customer-reviews__container {
+    padding: 0 1rem;
+  }
+  
+  .customer-reviews__title {
+    font-size: 2rem;
+  }
+  
+  .customer-reviews__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .review-card,
+  .platform-widget {
+    padding: 1.5rem;
+  }
+  
+  .review-cta {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-reviews__title {
+    font-size: 1.75rem;
+  }
+  
+  .review-card__header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .review-card__meta {
+    justify-content: center;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Customer Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "What Our Customers Say",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Join thousands of satisfied customers who trust us for their vaping needs",
+      "label": "Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overall_rating",
+      "default": true,
+      "label": "Show Overall Rating"
+    },
+    {
+      "type": "text",
+      "id": "overall_rating",
+      "default": "4.9",
+      "label": "Overall Rating"
+    },
+    {
+      "type": "text",
+      "id": "total_reviews",
+      "default": "1,247",
+      "label": "Total Reviews Count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_review_cta",
+      "default": true,
+      "label": "Show Review CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "default": "Love our products?",
+      "label": "CTA Title"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "Share your experience and help others discover quality vaping products",
+      "label": "CTA Text"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "default": "Write a Review",
+      "label": "CTA Button Text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "customer_name",
+          "default": "Sarah M.",
+          "label": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "customer_location",
+          "label": "Customer Location",
+          "placeholder": "New York, NY"
+        },
+        {
+          "type": "image_picker",
+          "id": "customer_image",
+          "label": "Customer Photo (optional)"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star Rating"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "default": "Amazing quality and fast shipping! The flavors are incredible and the customer service is top-notch.",
+          "label": "Review Text"
+        },
+        {
+          "type": "text",
+          "id": "product_mentioned",
+          "label": "Product Mentioned (optional)",
+          "placeholder": "Blue Razz E-Liquid"
+        },
+        {
+          "type": "text",
+          "id": "review_date",
+          "label": "Review Date",
+          "default": "2 weeks ago"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified_purchase",
+          "default": true,
+          "label": "Verified Purchase"
+        }
+      ]
+    },
+    {
+      "type": "platform_widget",
+      "name": "Review Platform Widget",
+      "settings": [
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Platform",
+          "options": [
+            {
+              "value": "trustpilot",
+              "label": "Trustpilot"
+            },
+            {
+              "value": "google",
+              "label": "Google Reviews"
+            },
+            {
+              "value": "custom",
+              "label": "Custom Platform"
+            }
+          ],
+          "default": "trustpilot"
+        },
+        {
+          "type": "text",
+          "id": "platform_rating",
+          "default": "4.8",
+          "label": "Platform Rating"
+        },
+        {
+          "type": "textarea",
+          "id": "platform_text",
+          "default": "Rated Excellent based on 500+ reviews",
+          "label": "Platform Description"
+        },
+        {
+          "type": "url",
+          "id": "platform_link",
+          "label": "Link to Reviews Page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "customer_name": "Sarah M.",
+            "customer_location": "California",
+            "rating": 5,
+            "review_text": "Amazing quality and fast shipping! The flavors are incredible and the customer service is top-notch.",
+            "product_mentioned": "Blue Razz E-Liquid",
+            "review_date": "2 weeks ago",
+            "verified_purchase": true
+          }
+        },
+        {
+          "type": "platform_widget",
+          "settings": {
+            "platform": "trustpilot",
+            "platform_rating": "4.8",
+            "platform_text": "Rated Excellent based on 500+ reviews"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "customer_name": "Mike T.",
+            "customer_location": "Texas",
+            "rating": 5,
+            "review_text": "Best vape shop online! Great selection, competitive prices, and super fast delivery.",
+            "product_mentioned": "Pod System Starter Kit",
+            "review_date": "1 month ago",
+            "verified_purchase": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "customer_name": "Emma L.",
+            "customer_location": "Florida",
+            "rating": 4,
+            "review_text": "Love the variety of flavors available. Customer support helped me choose the perfect setup for my needs.",
+            "product_mentioned": "Mango Ice E-Liquid",
+            "review_date": "3 weeks ago",
+            "verified_purchase": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

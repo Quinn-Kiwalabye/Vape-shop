@@ -1,0 +1,649 @@
+<section class="educational-compliance full-width">
+  <div class="educational-compliance__container">
+    <div class="educational-compliance__content">
+      <!-- Educational Content -->
+      <div class="educational-section">
+        <div class="educational-section__header">
+          <h2 class="educational-section__title">
+            {{ section.settings.edu_heading | default: 'New to Vaping?' }}
+          </h2>
+          <p class="educational-section__subtitle">
+            {{ section.settings.edu_subheading | default: 'Let us guide you through choosing the perfect vaping setup' }}
+          </p>
+        </div>
+
+        <div class="guide-steps">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'guide_step' -%}
+              <div class="guide-step" {{ block.shopify_attributes }}>
+                <div class="guide-step__number">{{ forloop.index }}</div>
+                <div class="guide-step__content">
+                  <h3 class="guide-step__title">{{ block.settings.step_title }}</h3>
+                  <p class="guide-step__description">{{ block.settings.step_description }}</p>
+                  {%- if block.settings.step_tips != blank -%}
+                    <ul class="guide-step__tips">
+                      {%- assign tips = block.settings.step_tips | split: ',' -%}
+                      {%- for tip in tips -%}
+                        <li>{{ tip | strip }}</li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.show_guide_cta -%}
+          <div class="guide-cta">
+            <h3>{{ section.settings.cta_title | default: 'Need Personal Guidance?' }}</h3>
+            <p>{{ section.settings.cta_text | default: 'Our vaping experts are here to help you find the perfect setup' }}</p>
+            <a href="{{ section.settings.cta_link | default: '/pages/contact' }}" class="guide-cta__button">
+              {{ section.settings.cta_button_text | default: 'Get Expert Help' }}
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Compliance Section -->
+      <div class="compliance-section">
+        <div class="compliance-notice">
+          <div class="compliance-notice__icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <div class="compliance-notice__content">
+            <h3 class="compliance-notice__title">{{ section.settings.compliance_title | default: 'Age Verification Required' }}</h3>
+            <p class="compliance-notice__text">{{ section.settings.compliance_text | default: 'You must be 21 years or older to purchase vaping products. This product contains nicotine, which is an addictive substance.' }}</p>
+          </div>
+        </div>
+
+        <div class="compliance-warnings">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'compliance_warning' -%}
+              <div class="compliance-warning" {{ block.shopify_attributes }}>
+                <div class="compliance-warning__icon">
+                  {%- case block.settings.warning_type -%}
+                    {%- when 'age' -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                      </svg>
+                    {%- when 'health' -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                      </svg>
+                    {%- when 'legal' -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                      </svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                      </svg>
+                  {%- endcase -%}
+                </div>
+                <div class="compliance-warning__content">
+                  <h4>{{ block.settings.warning_title }}</h4>
+                  <p>{{ block.settings.warning_text }}</p>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.show_legal_links -%}
+          <div class="legal-links">
+            <h4>{{ section.settings.legal_links_title | default: 'Important Information' }}</h4>
+            <div class="legal-links__grid">
+              {%- if section.settings.terms_link != blank -%}
+                <a href="{{ section.settings.terms_link }}" class="legal-link">Terms & Conditions</a>
+              {%- endif -%}
+              {%- if section.settings.privacy_link != blank -%}
+                <a href="{{ section.settings.privacy_link }}" class="legal-link">Privacy Policy</a>
+              {%- endif -%}
+              {%- if section.settings.shipping_link != blank -%}
+                <a href="{{ section.settings.shipping_link }}" class="legal-link">Shipping Policy</a>
+              {%- endif -%}
+              {%- if section.settings.age_verification_link != blank -%}
+                <a href="{{ section.settings.age_verification_link }}" class="legal-link">Age Verification</a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.educational-compliance {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  padding: 5rem 0;
+  position: relative;
+}
+
+.educational-compliance__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.educational-compliance__content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Educational Section */
+.educational-section__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.educational-section__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00eaff, #fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.educational-section__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.guide-step {
+  display: flex;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.guide-step:hover {
+  border-color: rgba(0, 234, 255, 0.4);
+  transform: translateX(10px);
+  box-shadow: 0 10px 30px rgba(0, 234, 255, 0.15);
+}
+
+.guide-step__number {
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  color: #000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.guide-step__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.guide-step__description {
+  color: #b4eaff;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.guide-step__tips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guide-step__tips li {
+  color: #00eaff;
+  padding: 0.25rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.guide-step__tips li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #00eaff;
+  font-weight: bold;
+}
+
+.guide-cta {
+  background: rgba(0, 234, 255, 0.1);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.guide-cta h3 {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.guide-cta p {
+  color: #b4eaff;
+  margin-bottom: 1.5rem;
+}
+
+.guide-cta__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  color: #000;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.guide-cta__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 234, 255, 0.4);
+}
+
+.guide-cta__button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Compliance Section */
+.compliance-section {
+  position: sticky;
+  top: 2rem;
+}
+
+.compliance-notice {
+  background: rgba(255, 68, 68, 0.1);
+  border: 2px solid rgba(255, 68, 68, 0.4);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.compliance-notice__icon {
+  color: #ff4444;
+  flex-shrink: 0;
+}
+
+.compliance-notice__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.compliance-notice__title {
+  color: #ff4444;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.compliance-notice__text {
+  color: #ffcccc;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.compliance-warnings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.compliance-warning {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  backdrop-filter: blur(5px);
+}
+
+.compliance-warning__icon {
+  color: #ff9800;
+  flex-shrink: 0;
+}
+
+.compliance-warning__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.compliance-warning h4 {
+  color: #ff9800;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.compliance-warning p {
+  color: #ffe0b3;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.legal-links {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.legal-links h4 {
+  color: #00eaff;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.legal-links__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.legal-link {
+  color: #b4eaff;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1px solid rgba(0, 234, 255, 0.2);
+}
+
+.legal-link:hover {
+  background: rgba(0, 234, 255, 0.1);
+  color: #00eaff;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .educational-compliance {
+    padding: 4rem 0;
+  }
+  
+  .educational-compliance__container {
+    padding: 0 1rem;
+  }
+  
+  .educational-compliance__content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .compliance-section {
+    position: static;
+  }
+  
+  .guide-step {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .guide-step:hover {
+    transform: translateY(-5px);
+  }
+  
+  .compliance-notice,
+  .compliance-warning {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Educational Compliance",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Educational Section"
+    },
+    {
+      "type": "text",
+      "id": "edu_heading",
+      "default": "New to Vaping?",
+      "label": "Educational Heading"
+    },
+    {
+      "type": "text",
+      "id": "edu_subheading",
+      "default": "Let us guide you through choosing the perfect vaping setup",
+      "label": "Educational Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guide_cta",
+      "default": true,
+      "label": "Show Guide CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "default": "Need Personal Guidance?",
+      "label": "CTA Title"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "Our vaping experts are here to help you find the perfect setup",
+      "label": "CTA Text"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "default": "Get Expert Help",
+      "label": "CTA Button Text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "header",
+      "content": "Compliance Section"
+    },
+    {
+      "type": "text",
+      "id": "compliance_title",
+      "default": "Age Verification Required",
+      "label": "Compliance Title"
+    },
+    {
+      "type": "textarea",
+      "id": "compliance_text",
+      "default": "You must be 21 years or older to purchase vaping products. This product contains nicotine, which is an addictive substance.",
+      "label": "Compliance Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_legal_links",
+      "default": true,
+      "label": "Show Legal Links"
+    },
+    {
+      "type": "text",
+      "id": "legal_links_title",
+      "default": "Important Information",
+      "label": "Legal Links Title"
+    },
+    {
+      "type": "url",
+      "id": "terms_link",
+      "label": "Terms & Conditions Link"
+    },
+    {
+      "type": "url",
+      "id": "privacy_link",
+      "label": "Privacy Policy Link"
+    },
+    {
+      "type": "url",
+      "id": "shipping_link",
+      "label": "Shipping Policy Link"
+    },
+    {
+      "type": "url",
+      "id": "age_verification_link",
+      "label": "Age Verification Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "guide_step",
+      "name": "Guide Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_title",
+          "default": "Choose Your Device Type",
+          "label": "Step Title"
+        },
+        {
+          "type": "textarea",
+          "id": "step_description",
+          "default": "Start by deciding between pods, mods, or disposables based on your experience level and preferences.",
+          "label": "Step Description"
+        },
+        {
+          "type": "text",
+          "id": "step_tips",
+          "label": "Tips (comma separated)",
+          "info": "e.g., Beginners: Start with pods, Advanced: Try mods",
+          "default": "Beginners: Start with pods, Advanced: Try mods, Convenience: Choose disposables"
+        }
+      ]
+    },
+    {
+      "type": "compliance_warning",
+      "name": "Compliance Warning",
+      "settings": [
+        {
+          "type": "select",
+          "id": "warning_type",
+          "label": "Warning Type",
+          "options": [
+            {
+              "value": "age",
+              "label": "Age Restriction"
+            },
+            {
+              "value": "health",
+              "label": "Health Warning"
+            },
+            {
+              "value": "legal",
+              "label": "Legal Notice"
+            },
+            {
+              "value": "general",
+              "label": "General Warning"
+            }
+          ],
+          "default": "age"
+        },
+        {
+          "type": "text",
+          "id": "warning_title",
+          "default": "21+ Only",
+          "label": "Warning Title"
+        },
+        {
+          "type": "textarea",
+          "id": "warning_text",
+          "default": "Must be 21 years or older to purchase",
+          "label": "Warning Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Educational Compliance",
+      "blocks": [
+        {
+          "type": "guide_step",
+          "settings": {
+            "step_title": "Choose Your Device Type",
+            "step_description": "Start by deciding between pods, mods, or disposables based on your experience level and preferences.",
+            "step_tips": "Beginners: Start with pods, Advanced: Try mods, Convenience: Choose disposables"
+          }
+        },
+        {
+          "type": "guide_step",
+          "settings": {
+            "step_title": "Select Your E-Liquid",
+            "step_description": "Pick flavors and nicotine strength that match your taste and smoking background.",
+            "step_tips": "Heavy smokers: 12-18mg nicotine, Light smokers: 3-6mg nicotine, Non-smokers: 0mg nicotine"
+          }
+        },
+        {
+          "type": "guide_step",
+          "settings": {
+            "step_title": "Get the Right Accessories",
+            "step_description": "Ensure you have backup coils, chargers, and other essentials for the best experience.",
+            "step_tips": "Always have spare coils, Use proper chargers, Keep devices clean"
+          }
+        },
+        {
+          "type": "compliance_warning",
+          "settings": {
+            "warning_type": "age",
+            "warning_title": "21+ Only",
+            "warning_text": "Must be 21 years or older to purchase vaping products"
+          }
+        },
+        {
+          "type": "compliance_warning",
+          "settings": {
+            "warning_type": "health",
+            "warning_title": "Nicotine Warning",
+            "warning_text": "This product contains nicotine, which is an addictive substance"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,128 @@
+<header class="header full-width" role="banner">
+  <h2 class="header__title">
+    {{ shop.name | link_to: routes.root_url }}
+  </h2>
+
+  <div class="header__menu">
+    {% for link in section.settings.menu.links %}
+      {{ link.title | link_to: link.url }}
+    {% endfor %}
+  </div>
+
+  <div class="header__icons">
+    {% if shop.customer_accounts_enabled %}
+      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
+    {% endif %}
+
+    <a href="{{ routes.cart_url }}">
+      {% if cart.item_count > 0 %}
+        <sup>{{ cart.item_count }}</sup>
+      {% endif %}
+
+      {{ 'icon-cart.svg' | inline_asset_content }}
+    </a>
+  </div>
+</header>
+
+{% stylesheet %}
+  header {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  background: rgba(15, 15, 30, 0.96); /* dark glassy */
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 0 32px 4px #00eaff30;
+  border-bottom: 2px solid #00eaff;
+}
+
+.header__title {
+  font-size: 2.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff;
+  font-family: 'Montserrat', 'Arial', sans-serif;
+}
+
+.header__title a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.header__title a:hover {
+  color: #00eaff;
+  text-shadow: 0 0 12px #00eaff90;
+}
+
+.header__menu {
+  display: flex;
+  gap: 2.2rem;
+}
+
+.header__menu a {
+  color: #b4eaff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.08rem;
+  transition: color 0.2s, text-shadow 0.2s;
+  text-shadow: 0 0 6px #00eaff30;
+}
+
+.header__menu a:hover {
+  color: #00eaff;
+  text-shadow: 0 0 12px #00eaff90;
+}
+
+.header__icons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.header__icons a {
+  color: #00eaff;
+  background: rgba(0, 234, 255, 0.10);
+  border-radius: 9px;
+  padding: 0.32rem 0.85rem;
+  box-shadow: 0 0 8px #00eaff40;
+  font-weight: 600;
+  transition: color 0.15s, box-shadow 0.2s;
+  position: relative;
+}
+
+.header__icons a:hover {
+  color: #fff;
+  box-shadow: 0 0 16px #00eaff70;
+}
+
+header svg {
+  width: 2rem;
+  filter: drop-shadow(0 0 6px #00eaff60);
+}
+
+header a sup {
+  position: absolute;
+  left: 100%;
+  top: -0.7rem;
+  background: #e200ff;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 8px #e200ff80;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    }
+  ]
+}
+{% endschema %}

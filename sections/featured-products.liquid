@@ -1,0 +1,458 @@
+{%- liquid
+  assign collection = section.settings.collection
+  assign products_to_show = section.settings.products_to_show | default: 6
+  assign show_vendor = section.settings.show_vendor
+  assign show_rating = section.settings.show_rating
+-%}
+
+<section class="featured-products full-width">
+  <div class="featured-products__container">
+    <div class="featured-products__header">
+      <h2 class="featured-products__title">
+        {{ section.settings.heading | default: 'Featured Products' }}
+      </h2>
+      <p class="featured-products__subtitle">
+        {{ section.settings.subheading | default: 'Discover our bestsellers and top-rated products' }}
+      </p>
+    </div>
+
+    <div class="featured-products__grid">
+      {%- if collection != blank -%}
+        {%- for product in collection.products limit: products_to_show -%}
+          <div class="product-card" data-product-id="{{ product.id }}">
+            <div class="product-card__image">
+              {%- if product.featured_media -%}
+                {{- product.featured_media | image_url: width: 400 | image_tag: 
+                    loading: 'lazy',
+                    alt: product.featured_media.alt | escape
+                -}}
+              {%- else -%}
+                <div class="product-card__placeholder">
+                  <span>No Image</span>
+                </div>
+              {%- endif -%}
+              
+              {%- if product.compare_at_price > product.price -%}
+                <span class="product-card__badge">Sale</span>
+              {%- endif -%}
+            </div>
+
+            <div class="product-card__content">
+              {%- if show_vendor and product.vendor != blank -%}
+                <div class="product-card__vendor">{{ product.vendor }}</div>
+              {%- endif -%}
+
+              <h3 class="product-card__title">
+                <a href="{{ product.url }}">{{ product.title | escape }}</a>
+              </h3>
+
+              {%- if show_rating and product.metafields.reviews.rating.value != blank -%}
+                <div class="product-card__rating">
+                  <div class="rating-stars">
+                    {%- assign rating = product.metafields.reviews.rating.value.rating -%}
+                    {%- assign rating_count = product.metafields.reviews.rating.value.count -%}
+                    {%- for i in (1..5) -%}
+                      <span class="star {% if i <= rating %}filled{% endif %}">★</span>
+                    {%- endfor -%}
+                    <span class="rating-count">({{ rating_count }})</span>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {%- if product.metafields.custom.flavor_notes != blank -%}
+                <div class="product-card__flavor">
+                  <span class="flavor-label">Flavor:</span>
+                  {{ product.metafields.custom.flavor_notes }}
+                </div>
+              {%- endif -%}
+
+              <div class="product-card__price">
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="price--sale">{{ product.price | money }}</span>
+                  <span class="price--compare">{{ product.compare_at_price | money }}</span>
+                {%- else -%}
+                  <span class="price">{{ product.price | money }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="product-card__actions">
+                {%- if product.available -%}
+                  <button type="button" class="btn btn--primary add-to-cart-btn" 
+                          data-product-id="{{ product.selected_or_first_available_variant.id }}">
+                    <span class="btn__text">Add to Cart</span>
+                    <span class="btn__icon">🛒</span>
+                  </button>
+                {%- else -%}
+                  <button type="button" class="btn btn--secondary" disabled>
+                    Sold Out
+                  </button>
+                {%- endif -%}
+                <a href="{{ product.url }}" class="btn btn--outline">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..products_to_show) -%}
+          <div class="product-card product-card--placeholder">
+            <div class="product-card__image">
+              <div class="product-card__placeholder">Product Image</div>
+            </div>
+            <div class="product-card__content">
+              <h3 class="product-card__title">Sample Product {{ i }}</h3>
+              <div class="product-card__price">
+                <span class="price">$29.99</span>
+              </div>
+              <div class="product-card__actions">
+                <button type="button" class="btn btn--primary">Add to Cart</button>
+                <button type="button" class="btn btn--outline">View Details</button>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.featured-products {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-products::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, #00eaff15 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, #e200ff15 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.featured-products__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.featured-products__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.featured-products__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px #00eaff40;
+}
+
+.featured-products__subtitle {
+  font-size: 1.1rem;
+  color: #b4eaff;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.featured-products__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 234, 255, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 234, 255, 0.2);
+}
+
+.product-card__image {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.product-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card__image img {
+  transform: scale(1.05);
+}
+
+.product-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #00eaff20, #e200ff20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #e200ff, #ff006e);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.product-card__content {
+  padding: 1.5rem;
+}
+
+.product-card__vendor {
+  font-size: 0.8rem;
+  color: #00eaff;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.product-card__title {
+  margin-bottom: 1rem;
+}
+
+.product-card__title a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.product-card__title a:hover {
+  color: #00eaff;
+}
+
+.product-card__rating {
+  margin-bottom: 0.75rem;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star {
+  color: #666;
+  font-size: 1rem;
+}
+
+.star.filled {
+  color: #ffd700;
+  text-shadow: 0 0 4px #ffd70080;
+}
+
+.rating-count {
+  font-size: 0.8rem;
+  color: #999;
+  margin-left: 0.5rem;
+}
+
+.product-card__flavor {
+  font-size: 0.9rem;
+  color: #b4eaff;
+  margin-bottom: 1rem;
+}
+
+.flavor-label {
+  color: #00eaff;
+  font-weight: 600;
+}
+
+.product-card__price {
+  margin-bottom: 1.5rem;
+}
+
+.price, .price--sale {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #00eaff;
+}
+
+.price--compare {
+  font-size: 1rem;
+  color: #999;
+  text-decoration: line-through;
+  margin-left: 0.5rem;
+}
+
+.product-card__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #00eaff, #0099cc);
+  color: #000;
+}
+
+.btn--primary:hover {
+  background: linear-gradient(135deg, #00eaff, #00b3e6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 234, 255, 0.4);
+}
+
+.btn--secondary {
+  background: #333;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.btn--outline {
+  background: transparent;
+  color: #00eaff;
+  border: 1px solid #00eaff;
+}
+
+.btn--outline:hover {
+  background: rgba(0, 234, 255, 0.1);
+  color: #fff;
+}
+
+.btn__icon {
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .featured-products {
+    padding: 3rem 0;
+  }
+  
+  .featured-products__container {
+    padding: 0 1rem;
+  }
+  
+  .featured-products__title {
+    font-size: 2rem;
+  }
+  
+  .featured-products__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .product-card__actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-products__title {
+    font-size: 1.75rem;
+  }
+  
+  .product-card__content {
+    padding: 1rem;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Featured Products",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Discover our bestsellers and top-rated products",
+      "label": "Subheading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Number of products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": true,
+      "label": "Show product vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show product rating"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}

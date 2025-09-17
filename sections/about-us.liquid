@@ -1,0 +1,807 @@
+<section class="about-brand-story full-width">
+  <div class="about-brand-story__container">
+    <div class="about-brand-story__content">
+      <div class="brand-story">
+        <div class="brand-story__header">
+          <h2 class="brand-story__title">
+            {{ section.settings.heading | default: 'About Our Story' }}
+          </h2>
+          <p class="brand-story__subtitle">
+            {{ section.settings.subheading | default: 'Your trusted partner in premium vaping since day one' }}
+          </p>
+        </div>
+
+        <div class="story-content">
+          <div class="story-text">
+            <div class="story-section">
+              <h3>{{ section.settings.mission_title | default: 'Our Mission' }}</h3>
+              <p>{{ section.settings.mission_text | default: 'We are committed to providing high-quality vaping products and exceptional customer service to help you find the perfect vaping experience.' }}</p>
+            </div>
+
+            {%- if section.settings.story_text != blank -%}
+              <div class="story-section">
+                <h3>{{ section.settings.story_title | default: 'Our Story' }}</h3>
+                <p>{{ section.settings.story_text }}</p>
+              </div>
+            {%- endif -%}
+
+            <div class="story-values">
+              <h3>{{ section.settings.values_title | default: 'What We Stand For' }}</h3>
+              <div class="values-grid">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'value' -%}
+                    <div class="value-item" {{ block.shopify_attributes }}>
+                      <div class="value-icon">
+                        {%- case block.settings.icon_type -%}
+                          {%- when 'quality' -%}
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                          {%- when 'trust' -%}
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            </svg>
+                          {%- when 'support' -%}
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M21 6h-2l-9-4-9 4v7c0 5.55 3.84 10.74 9 12 .65-.16 1.27-.4 1.84-.7L21 15V6z"/>
+                            </svg>
+                          {%- when 'innovation' -%}
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/>
+                            </svg>
+                          {%- else -%}
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        {%- endcase -%}
+                      </div>
+                      <h4>{{ block.settings.value_title }}</h4>
+                      <p>{{ block.settings.value_description }}</p>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+
+          {%- if section.settings.founder_image != blank or section.settings.team_image != blank -%}
+            <div class="story-media">
+              {%- if section.settings.founder_image != blank -%}
+                <div class="founder-card">
+                  {{ section.settings.founder_image | image_url: width: 400 | image_tag: 
+                      loading: 'lazy',
+                      alt: section.settings.founder_name | escape
+                  }}
+                  <div class="founder-info">
+                    <h4>{{ section.settings.founder_name | default: 'Founder & CEO' }}</h4>
+                    <p>{{ section.settings.founder_quote | default: 'Passionate about delivering the best vaping experience' }}</p>
+                  </div>
+                </div>
+              {%- endif -%}
+              
+              {%- if section.settings.team_image != blank -%}
+                <div class="team-image">
+                  {{ section.settings.team_image | image_url: width: 600 | image_tag: 
+                      loading: 'lazy',
+                      alt: 'Our Team'
+                  }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Certifications & Trust Signals -->
+      <div class="trust-section">
+        <h3 class="trust-section__title">{{ section.settings.trust_title | default: 'Why Choose Us' }}</h3>
+        
+        <div class="trust-signals">
+          {%- if section.settings.show_stats -%}
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-number">{{ section.settings.stat_1_number | default: '50K+' }}</div>
+                <div class="stat-label">{{ section.settings.stat_1_label | default: 'Happy Customers' }}</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">{{ section.settings.stat_2_number | default: '5+' }}</div>
+                <div class="stat-label">{{ section.settings.stat_2_label | default: 'Years Experience' }}</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">{{ section.settings.stat_3_number | default: '24/7' }}</div>
+                <div class="stat-label">{{ section.settings.stat_3_label | default: 'Customer Support' }}</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">{{ section.settings.stat_4_number | default: '1000+' }}</div>
+                <div class="stat-label">{{ section.settings.stat_4_label | default: 'Products' }}</div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_certifications -%}
+            <div class="certifications">
+              <h4>{{ section.settings.cert_title | default: 'Certifications & Partnerships' }}</h4>
+              <div class="certifications-grid">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'certification' -%}
+                    <div class="certification-item" {{ block.shopify_attributes }}>
+                      {%- if block.settings.cert_image != blank -%}
+                        {{ block.settings.cert_image | image_url: width: 120 | image_tag: 
+                            loading: 'lazy',
+                            alt: block.settings.cert_name | escape
+                        }}
+                      {%- else -%}
+                        <div class="cert-placeholder">
+                          <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9l-5 4.87 1.18 6.88L12 17.77l-6.18 3.26L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                          </svg>
+                        </div>
+                      {%- endif -%}
+                      <span>{{ block.settings.cert_name }}</span>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="trust-features">
+            <div class="trust-feature">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+              </svg>
+              <div>
+                <h5>Secure Shopping</h5>
+                <p>SSL encrypted checkout</p>
+              </div>
+            </div>
+            
+            <div class="trust-feature">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/>
+              </svg>
+              <div>
+                <h5>Easy Returns</h5>
+                <p>30-day return policy</p>
+              </div>
+            </div>
+            
+            <div class="trust-feature">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
+              <div>
+                <h5>Expert Support</h5>
+                <p>Knowledgeable team ready to help</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.about-brand-story {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-brand-story::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 234, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(226, 0, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.about-brand-story__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-story__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.brand-story__title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #00eaff, #fff, #e200ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-story__subtitle {
+  font-size: 1.2rem;
+  color: #b4eaff;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.story-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.story-section {
+  margin-bottom: 2.5rem;
+}
+
+.story-section h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00eaff;
+  margin-bottom: 1rem;
+}
+
+.story-section p {
+  color: #b4eaff;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.value-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.value-item:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 234, 255, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 234, 255, 0.15);
+}
+
+.value-icon {
+  color: #00eaff;
+  margin-bottom: 1rem;
+}
+
+.value-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.value-item h4 {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.value-item p {
+  color: #b4eaff;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.story-media {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.founder-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(226, 0, 255, 0.3);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.founder-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.founder-info {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.founder-info h4 {
+  color: #e200ff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.founder-info p {
+  color: #b4eaff;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.team-image img {
+  width: 100%;
+  border-radius: 1rem;
+  filter: brightness(0.9) contrast(1.1);
+}
+
+.trust-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 2rem;
+  padding: 3rem;
+  backdrop-filter: blur(10px);
+}
+
+.trust-section__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, #00eaff, #e200ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(0, 234, 255, 0.1);
+  border: 1px solid rgba(0, 234, 255, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem 1rem;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #00eaff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(0, 234, 255, 0.5);
+}
+
+.stat-label {
+  color: #b4eaff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.certifications {
+  margin-bottom: 2.5rem;
+}
+
+.certifications h4 {
+  color: #e200ff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.certifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+}
+
+.certification-item {
+  background: rgba(226, 0, 255, 0.1);
+  border: 1px solid rgba(226, 0, 255, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.certification-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(226, 0, 255, 0.5);
+}
+
+.certification-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 0.75rem;
+  filter: brightness(0) invert(1);
+}
+
+.cert-placeholder {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 0.75rem;
+  color: #e200ff;
+}
+
+.cert-placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+.certification-item span {
+  color: #e200ff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.trust-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.trust-feature {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.trust-feature svg {
+  width: 40px;
+  height: 40px;
+  color: #00eaff;
+  flex-shrink: 0;
+}
+
+.trust-feature h5 {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.trust-feature p {
+  color: #b4eaff;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-brand-story {
+    padding: 4rem 0;
+  }
+  
+  .about-brand-story__container {
+    padding: 0 1rem;
+  }
+  
+  .brand-story__title {
+    font-size: 2rem;
+  }
+  
+  .story-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .trust-features {
+    grid-template-columns: 1fr;
+  }
+  
+  .trust-section {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .certifications-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Brand Story",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "About Our Story",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Your trusted partner in premium vaping since day one",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "mission_title",
+      "default": "Our Mission",
+      "label": "Mission Title"
+    },
+    {
+      "type": "textarea",
+      "id": "mission_text",
+      "default": "We are committed to providing high-quality vaping products and exceptional customer service to help you find the perfect vaping experience.",
+      "label": "Mission Text"
+    },
+    {
+      "type": "text",
+      "id": "story_title",
+      "default": "Our Story",
+      "label": "Story Title"
+    },
+    {
+      "type": "textarea",
+      "id": "story_text",
+      "label": "Story Text",
+      "info": "Tell your brand's story here"
+    },
+    {
+      "type": "text",
+      "id": "values_title",
+      "default": "What We Stand For",
+      "label": "Values Title"
+    },
+    {
+      "type": "header",
+      "content": "Team & Founder"
+    },
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "Founder Image"
+    },
+    {
+      "type": "text",
+      "id": "founder_name",
+      "default": "Founder & CEO",
+      "label": "Founder Name/Title"
+    },
+    {
+      "type": "text",
+      "id": "founder_quote",
+      "default": "Passionate about delivering the best vaping experience",
+      "label": "Founder Quote"
+    },
+    {
+      "type": "image_picker",
+      "id": "team_image",
+      "label": "Team Image"
+    },
+    {
+      "type": "header",
+      "content": "Trust & Statistics"
+    },
+    {
+      "type": "text",
+      "id": "trust_title",
+      "default": "Why Choose Us",
+      "label": "Trust Section Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "default": true,
+      "label": "Show Statistics"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_number",
+      "default": "50K+",
+      "label": "Stat 1 Number"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "default": "Happy Customers",
+      "label": "Stat 1 Label"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_number",
+      "default": "5+",
+      "label": "Stat 2 Number"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "default": "Years Experience",
+      "label": "Stat 2 Label"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_number",
+      "default": "24/7",
+      "label": "Stat 3 Number"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "default": "Customer Support",
+      "label": "Stat 3 Label"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_number",
+      "default": "1000+",
+      "label": "Stat 4 Number"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_label",
+      "default": "Products",
+      "label": "Stat 4 Label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_certifications",
+      "default": true,
+      "label": "Show Certifications"
+    },
+    {
+      "type": "text",
+      "id": "cert_title",
+      "default": "Certifications & Partnerships",
+      "label": "Certifications Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Company Value",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon Type",
+          "options": [
+            {
+              "value": "quality",
+              "label": "Quality"
+            },
+            {
+              "value": "trust",
+              "label": "Trust"
+            },
+            {
+              "value": "support",
+              "label": "Support"
+            },
+            {
+              "value": "innovation",
+              "label": "Innovation"
+            }
+          ],
+          "default": "quality"
+        },
+        {
+          "type": "text",
+          "id": "value_title",
+          "default": "Premium Quality",
+          "label": "Value Title"
+        },
+        {
+          "type": "textarea",
+          "id": "value_description",
+          "default": "We source only the highest quality products from trusted manufacturers",
+          "label": "Value Description"
+        }
+      ]
+    },
+    {
+      "type": "certification",
+      "name": "Certification",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "cert_image",
+          "label": "Certification Logo"
+        },
+        {
+          "type": "text",
+          "id": "cert_name",
+          "default": "FDA Registered",
+          "label": "Certification Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Brand Story",
+      "blocks": [
+        {
+          "type": "value",
+          "settings": {
+            "icon_type": "quality",
+            "value_title": "Premium Quality",
+            "value_description": "We source only the highest quality products from trusted manufacturers"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon_type": "trust",
+            "value_title": "Trust & Safety",
+            "value_description": "Your safety is our priority with rigorous testing and quality assurance"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon_type": "support",
+            "value_title": "Expert Support",
+            "value_description": "Our knowledgeable team provides personalized guidance and support"
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "icon_type": "innovation",
+            "value_title": "Innovation",
+            "value_description": "Always bringing you the latest and greatest in vaping technology"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "cert_name": "FDA Registered"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "cert_name": "ISO Certified"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
